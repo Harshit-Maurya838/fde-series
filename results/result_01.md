@@ -1,4 +1,4 @@
-# Output of 01_tokentizer.py
+# Output of 01_tokenizer.py
 
 ```text
 'I love coding'
