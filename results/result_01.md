@@ -1,5 +1,6 @@
 # Output of 01_tokentizer.py
 
+```text
 'I love coding'
   characters: 13 | tokens: 3
   ids:    [40, 3021, 11058]
@@ -24,3 +25,4 @@
   characters: 29 | tokens: 6
   ids:    [791, 6864, 315, 6890, 374, 22767]
   pieces: ['The', ' capital', ' of', ' India', ' is', ' Delhi']
+```

@@ -1,5 +1,6 @@
 # Output of 02_temperature.py
 
+```text
 === temperature 0.0 ===
 1. morning.
 2. morning.
@@ -15,3 +16,4 @@
 5. morning.
 
 Gemini token count for 'I love coding': 4
+```
