@@ -85,27 +85,21 @@ To turn logits into valid probabilities that sum to 1, we apply the **Softmax** 
 
 $$P(w_i) = \frac{e^{z_i / T}}{\sum_{j=1}^{|V|} e^{z_j / T}}$$
 
-```
-[Context Tokens]
-       ↓
-[Transformer Layers]
-       ↓
-[Logits (Raw Scores)] ──> e.g. ["morning": 8.5, "day": 6.2, "night": 1.1]
-       ↓
-[Scale by Temperature T]
-       ↓
-[Softmax Function]    ──> e.g. ["morning": 89%, "day": 10%, "night": 1%]
-       ↓
-[Sampling / Selection]──> Selected Next Token
+```mermaid
+flowchart TD
+    A["Context Tokens"] --> B["Transformer Layers"]
+    B --> C["Logits (Raw Scores)"]
+    C --> D["Scale by Temperature (T)"]
+    D --> E["Softmax Function"]
+    E --> F["Sampling / Selection"]
+    F --> G["Selected Next Token"]
+
+    C -.-> C_val["e.g. 'morning': 8.5, 'day': 6.2, 'night': 1.1"]
+    E -.-> E_val["e.g. 'morning': 89%, 'day': 10%, 'night': 1%"]
 ```
 
 - **Temperature $T \to 0$ (Greedy / Argmax):** The highest logit dominates with probability $\approx 1$. The model becomes strictly deterministic.
 - **Moderate Temperature ($T \approx 0.7 - 1.0$):** Softens the distribution. The top tokens remain most probable, but second- and third-ranked tokens have a realistic chance to be sampled, enabling creative variety.
 - **High Temperature ($T > 1.5$):** Flattens the distribution toward uniform probability, introducing randomness and hallucination.
 
----
-
-## Credit
-
-Based on Coder Army’s FDE course, episodes 1-2.
 
