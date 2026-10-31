@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-MODEL = "gemini-3.8-flash"
+MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
 
 PROMPT = "Complete this in one short line: I drink coffee every"
 RUNS = 5
