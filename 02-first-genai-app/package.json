@@ -1,0 +1,35 @@
+{
+  "name": "02-first-genai-app",
+  "version": "1.0.0",
+  "description": "Part 2 of FDE Series: First GenAI App with Node.js, Express, and @google/genai",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "experiment:1": "node experiments/01_memory.js",
+    "experiment:2": "node experiments/02_token_growth.js",
+    "experiment:3": "node experiments/03_system_prompt.js",
+    "experiment:4": "node experiments/04_hallucination.js",
+    "experiments": "node experiments/01_memory.js && node experiments/02_token_growth.js && node experiments/03_system_prompt.js && node experiments/04_hallucination.js"
+  },
+  "keywords": [
+    "genai",
+    "fde",
+    "gemini",
+    "express",
+    "llm",
+    "chat-history",
+    "token-cost",
+    "system-prompt",
+    "hallucination"
+  ],
+  "author": "Harshit Maurya",
+  "license": "MIT",
+  "dependencies": {
+    "@google/genai": "^2.32.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}

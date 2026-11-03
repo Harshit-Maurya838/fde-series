@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickBite Support AI | FDE Series Part 2</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --user-bubble: #2563eb;
+      --model-bubble: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      background: linear-gradient(135deg, #f97316, #ef4444);
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      color: var(--accent);
+    }
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 13px;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    select, input[type="number"], button {
+      background: #0f172a;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    select:focus, input[type="number"]:focus {
+      border-color: var(--accent);
+    }
+
+    button {
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    button:hover {
+      background: #1e293b;
+      border-color: var(--accent);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0f172a;
+      font-weight: 600;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Live Token Telemetry Bar */
+    .telemetry-bar {
+      background: #141f36;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 24px;
+      display: flex;
+      gap: 24px;
+      font-size: 12px;
+      flex-shrink: 0;
+      overflow-x: auto;
+    }
+
+    .metric {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .metric-label {
+      color: var(--text-muted);
+    }
+
+    .metric-value {
+      font-weight: 700;
+      color: var(--text);
+      background: #1e293b;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid #334155;
+    }
+
+    .metric-value.highlight {
+      color: var(--accent);
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+
+    /* Main Chat Layout */
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px 20px;
+    }
+
+    .messages-pane {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-right: 8px;
+    }
+
+    .message-wrapper {
+      display: flex;
+      flex-direction: column;
+      max-width: 80%;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message-wrapper.user {
+      align-self: flex-end;
+      align-items: flex-end;
+    }
+
+    .message-wrapper.model {
+      align-self: flex-start;
+      align-items: flex-start;
+    }
+
+    .message-sender {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      padding: 0 4px;
+    }
+
+    .message-bubble {
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .user .message-bubble {
+      background: var(--user-bubble);
+      color: #fff;
+      border-bottom-right-radius: 2px;
+    }
+
+    .model .message-bubble {
+      background: var(--model-bubble);
+      color: var(--text);
+      border-bottom-left-radius: 2px;
+      border: 1px solid var(--border);
+    }
+
+    .message-meta {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: flex;
+      gap: 8px;
+      padding: 0 4px;
+    }
+
+    .badge {
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Quick suggestions */
+    .quick-prompts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0 8px 0;
+    }
+
+    .prompt-chip {
+      background: #1e293b;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .prompt-chip:hover {
+      background: #334155;
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    /* Input area */
+    .input-bar {
+      display: flex;
+      gap: 8px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px 12px;
+      margin-top: 4px;
+      align-items: center;
+    }
+
+    .input-bar input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .input-bar input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .mode-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-left: 1px solid var(--border);
+      padding-left: 10px;
+    }
+
+    .mode-toggle input {
+      accent-color: var(--warning);
+      cursor: pointer;
+    }
+
+    .typing-indicator {
+      display: none;
+      align-self: flex-start;
+      background: var(--model-bubble);
+      padding: 8px 14px;
+      border-radius: var(--radius);
+      font-size: 12px;
+      color: var(--text-muted);
+      font-style: italic;
+      border: 1px solid var(--border);
+    }
+    /* Modal Drawer for Summarizer */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 600px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .modal-card textarea {
+      width: 100%;
+      height: 140px;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 13px;
+      resize: vertical;
+      outline: none;
+    }
+
+    .modal-card textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .summary-result-box {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      min-height: 60px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top App Header -->
+  <header>
+    <div class="brand">
+      <div class="brand-logo">🍔</div>
+      <div>
+        <div class="brand-title">QuickBite Support AI</div>
+        <div class="brand-sub">Part 2: First GenAI App | History & Token Cost</div>
+      </div>
+    </div>
+
+    <div class="top-controls">
+      <div class="control-group">
+        <label for="strategySelect">Strategy:</label>
+        <select id="strategySelect" title="History strategy">
+          <option value="full" selected>Full History</option>
+          <option value="first_n">First N</option>
+          <option value="first_n_last_n">First N + Last N</option>
+          <option value="summary">Running Summary</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="nParam">N:</label>
+        <input type="number" id="nParam" value="2" min="1" max="10" style="width: 50px;">
+      </div>
+
+      <div class="control-group">
+        <button id="btnOpenSummarizer" title="Open Ticket Summarizer">📝 Ticket Summarizer</button>
+      </div>
+
+      <div class="control-group">
+        <button id="btnNewSession" title="Start a fresh chat session">🔄 Reset Session</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Live Token Telemetry Bar -->
+  <div class="telemetry-bar">
+    <div class="metric">
+      <span class="metric-label">Session ID:</span>
+      <span class="metric-value" id="dispSessionId">-</span>
+    </div>
+    <div class="metric">
+      <span class="metric-label">Last Input Tokens:</span>
+      <span class="metric-value highlight" id="dispLastInput">0</span>
+    </div>
+    <div class="metric">
+      <span class="metric-label">Last Output Tokens:</span>
+      <span class="metric-value" id="dispLastOutput">0</span>
+    </div>
+    <div class="metric">
+      <span class="metric-label">Session Total Tokens:</span>
+      <span class="metric-value highlight" id="dispCumulative">0</span>
+    </div>
+    <div class="metric">
+      <span class="metric-label">History Turns:</span>
+      <span class="metric-value" id="dispTurns">0</span>
+    </div>
+    <div class="metric">
+      <span class="metric-label">Active Strategy:</span>
+      <span class="metric-value" id="dispStrategy">full</span>
+    </div>
+  </div>
+
+  <!-- Chat View Container -->
+  <div class="chat-container">
+    <div class="messages-pane" id="messagesPane">
+      <div class="message-wrapper model">
+        <div class="message-sender">QuickBite Assistant</div>
+        <div class="message-bubble">
+          Hello! Welcome to QuickBite customer support. How can I assist you with your food order or delivery today?
+        </div>
+        <div class="message-meta">
+          <span class="badge">System Initialized</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="typing-indicator" id="typingIndicator">
+      Agent is thinking...
+    </div>
+
+    <!-- Suggested Quick Prompts -->
+    <div class="quick-prompts">
+      <button class="prompt-chip" data-prompt="Hi, my name is Harshit and my order ID is #48291.">
+        👤 "My name is Harshit & order is #48291"
+      </button>
+      <button class="prompt-chip" data-prompt="What is my name and order ID?">
+        🧠 "What is my name and order ID?"
+      </button>
+      <button class="prompt-chip" data-prompt="My burger arrived cold and soggy. Can I get a replacement?">
+        🍔 "Burger arrived cold and soggy"
+      </button>
+      <button class="prompt-chip" data-prompt="Can you explain what Docker containers are?">
+        🚫 Out-of-Scope: "What is Docker?"
+      </button>
+    </div>
+
+    <!-- Message Input Bar -->
+    <div class="input-bar">
+      <input type="text" id="userInput" placeholder="Type a message to QuickBite support..." autocomplete="off">
+      <div class="mode-toggle" title="Stateless calls send only the current message with no history">
+        <input type="checkbox" id="statelessToggle">
+        <label for="statelessToggle">Stateless</label>
+      </div>
+      <button class="btn-primary" id="btnSend">Send</button>
+    </div>
+  </div>
+
+  <!-- Ticket Summarizer Modal -->
+  <div class="modal-overlay" id="summarizerModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">📝 Ticket Summarizer (POST /api/summarize)</div>
+        <button class="modal-close" id="btnCloseSummarizer">&times;</button>
+      </div>
+      <p style="font-size: 13px; color: var(--text-muted);">
+        Paste a raw customer ticket below. The server calls Gemini to produce a 2-line concise summary via a single stateless call.
+      </p>
+      <textarea id="ticketInput" placeholder="Paste ticket here...">Customer Support Ticket #98124
+Customer: Emily Watson
+Issue: I placed an order for two vegan pizzas and garlic bread from Downtown Pizzeria at 7:30 PM. The estimated delivery time was 8:05 PM. The food arrived at 9:15 PM (over an hour late) and the driver handed me a crushed box with cold vegetarian pasta instead of my pizza. I tried calling the restaurant, but they did not answer. I demand a full refund and credit to my account.</textarea>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <button class="btn-primary" id="btnRunSummarize">Summarize in 2 Lines</button>
+        <span id="summarizeTokens" style="font-size: 12px; color: var(--accent);"></span>
+      </div>
+      <div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Output:</div>
+        <div class="summary-result-box" id="summarizeOutput">Click "Summarize in 2 Lines" to run.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State management
+    let sessionId = "session_" + Math.random().toString(36).substring(2, 9);
+    let cumulativeTokens = 0;
+    let turnCount = 0;
+
+    // DOM Elements
+    const messagesPane = document.getElementById("messagesPane");
+    const userInput = document.getElementById("userInput");
+    const btnSend = document.getElementById("btnSend");
+    const btnNewSession = document.getElementById("btnNewSession");
+    const strategySelect = document.getElementById("strategySelect");
+    const nParam = document.getElementById("nParam");
+    const statelessToggle = document.getElementById("statelessToggle");
+    const typingIndicator = document.getElementById("typingIndicator");
+
+    // Telemetry DOM
+    const dispSessionId = document.getElementById("dispSessionId");
+    const dispLastInput = document.getElementById("dispLastInput");
+    const dispLastOutput = document.getElementById("dispLastOutput");
+    const dispCumulative = document.getElementById("dispCumulative");
+    const dispTurns = document.getElementById("dispTurns");
+    const dispStrategy = document.getElementById("dispStrategy");
+
+    function updateTelemetry(lastInput = 0, lastOutput = 0, strategy = "full") {
+      dispSessionId.textContent = sessionId;
+      dispLastInput.textContent = lastInput;
+      dispLastOutput.textContent = lastOutput;
+      dispCumulative.textContent = cumulativeTokens;
+      dispTurns.textContent = turnCount;
+      dispStrategy.textContent = strategy;
+    }
+
+    function initSession() {
+      sessionId = "session_" + Math.random().toString(36).substring(2, 9);
+      cumulativeTokens = 0;
+      turnCount = 0;
+      messagesPane.innerHTML = `
+        <div class="message-wrapper model">
+          <div class="message-sender">QuickBite Assistant</div>
+          <div class="message-bubble">
+            Hello! Welcome to QuickBite customer support. How can I assist you with your food order or delivery today?
+          </div>
+          <div class="message-meta">
+            <span class="badge">Session Initialized</span>
+          </div>
+        </div>
+      `;
+      updateTelemetry(0, 0, strategySelect.value);
+    }
+
+    function appendMessage(role, text, metaInfo = "") {
+      const wrapper = document.createElement("div");
+      wrapper.className = `message-wrapper ${role}`;
+
+      const sender = document.createElement("div");
+      sender.className = "message-sender";
+      sender.textContent = role === "user" ? "You" : "QuickBite Assistant";
+
+      const bubble = document.createElement("div");
+      bubble.className = "message-bubble";
+      bubble.textContent = text;
+
+      wrapper.appendChild(sender);
+      wrapper.appendChild(bubble);
+
+      if (metaInfo) {
+        const meta = document.createElement("div");
+        meta.className = "message-meta";
+        meta.innerHTML = `<span class="badge">${metaInfo}</span>`;
+        wrapper.appendChild(meta);
+      }
+
+      messagesPane.appendChild(wrapper);
+      messagesPane.scrollTop = messagesPane.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const text = userInput.value.trim();
+      if (!text) return;
+
+      const isStateless = statelessToggle.checked;
+      const strategy = strategySelect.value;
+      const n = parseInt(nParam.value, 10) || 2;
+
+      // Append user bubble
+      appendMessage("user", text);
+      userInput.value = "";
+      userInput.focus();
+
+      // Show typing indicator
+      typingIndicator.style.display = "block";
+      messagesPane.scrollTop = messagesPane.scrollHeight;
+
+      try {
+        const endpoint = isStateless ? "/api/chat/stateless" : "/api/chat";
+        const payload = isStateless
+          ? { message: text }
+          : { sessionId, message: text, strategy, n };
+
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.error || `HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        const usage = data.usage || { inputTokens: 0, outputTokens: 0, totalTokens: 0 };
+
+        cumulativeTokens += usage.totalTokens;
+        turnCount = data.historyLength || (turnCount + 2);
+
+        let metaText = `In: ${usage.inputTokens} | Out: ${usage.outputTokens}`;
+        if (isStateless) {
+          metaText += " | Stateless Call";
+        } else {
+          metaText += ` | Strategy: ${data.strategy}`;
+          if (data.summaryUsage) {
+            metaText += ` (Summary: ${data.summaryUsage.totalTokens} tok)`;
+          }
+        }
+
+        appendMessage("model", data.reply, metaText);
+        updateTelemetry(usage.inputTokens, usage.outputTokens, isStateless ? "stateless" : data.strategy);
+      } catch (err) {
+        appendMessage("model", `⚠️ Error: ${err.message}`, "Call Failed");
+      } finally {
+        typingIndicator.style.display = "none";
+      }
+    }
+
+    // Event listeners
+    btnSend.addEventListener("click", sendMessage);
+    userInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") sendMessage();
+    });
+
+    btnNewSession.addEventListener("click", () => {
+      initSession();
+    });
+
+    strategySelect.addEventListener("change", () => {
+      updateTelemetry(0, 0, strategySelect.value);
+    });
+
+    document.querySelectorAll(".prompt-chip").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        userInput.value = btn.getAttribute("data-prompt");
+        sendMessage();
+      });
+    });
+
+    // Summarizer Modal handlers
+    const btnOpenSummarizer = document.getElementById("btnOpenSummarizer");
+    const btnCloseSummarizer = document.getElementById("btnCloseSummarizer");
+    const summarizerModal = document.getElementById("summarizerModal");
+    const btnRunSummarize = document.getElementById("btnRunSummarize");
+    const ticketInput = document.getElementById("ticketInput");
+    const summarizeOutput = document.getElementById("summarizeOutput");
+    const summarizeTokens = document.getElementById("summarizeTokens");
+
+    btnOpenSummarizer.addEventListener("click", () => {
+      summarizerModal.style.display = "flex";
+    });
+
+    btnCloseSummarizer.addEventListener("click", () => {
+      summarizerModal.style.display = "none";
+    });
+
+    summarizerModal.addEventListener("click", (e) => {
+      if (e.target === summarizerModal) summarizerModal.style.display = "none";
+    });
+
+    btnRunSummarize.addEventListener("click", async () => {
+      const text = ticketInput.value.trim();
+      if (!text) return;
+
+      btnRunSummarize.disabled = true;
+      btnRunSummarize.textContent = "Summarizing...";
+      summarizeOutput.textContent = "Calling Gemini API...";
+      summarizeTokens.textContent = "";
+
+      try {
+        const res = await fetch("/api/summarize", {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: text,
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+
+        summarizeOutput.textContent = data.summary;
+        summarizeTokens.textContent = `Tokens: In ${data.usage.inputTokens} | Out ${data.usage.outputTokens} | Total ${data.usage.totalTokens}`;
+      } catch (err) {
+        summarizeOutput.textContent = `Error: ${err.message}`;
+      } finally {
+        btnRunSummarize.disabled = false;
+        btnRunSummarize.textContent = "Summarize in 2 Lines";
+      }
+    });
+
+    // Initialize UI
+    initSession();
+  </script>
+</body>
+</html>
+
