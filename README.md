@@ -29,6 +29,14 @@ flowchart LR
     P4 --> P5["5. Structured Outputs & MCP"]
     P5 --> P6["6. Multimodal & Evals"]
     P6 --> P7["7. Security & Agents"]
+    
+    style P1 fill:#10b981,stroke:#059669,color:#ffffff
+    style P2 fill:#10b981,stroke:#059669,color:#ffffff
+    style P3 fill:#1e293b,stroke:#475569,color:#94a3b8
+    style P4 fill:#1e293b,stroke:#475569,color:#94a3b8
+    style P5 fill:#1e293b,stroke:#475569,color:#94a3b8
+    style P6 fill:#1e293b,stroke:#475569,color:#94a3b8
+    style P7 fill:#1e293b,stroke:#475569,color:#94a3b8
 ```
 
 | Part | Module | Status | Directory | Focus Areas |
@@ -81,13 +89,22 @@ $env:GEMINI_API_KEY="your-gemini-api-key"
 ```
 
 ### 3. Explore a specific module
-Navigate into any completed module folder and follow its localized `README.md`:
+
+#### Part 1: LLM Basics (Python)
 ```bash
 cd LLM_Basics
 python3 -m venv .venv
 source .venv/bin/activate    # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 python 01_tokenizer.py
+```
+
+#### Part 2: First GenAI App (Node.js & Express)
+```bash
+cd 02-first-genai-app
+npm install
+npm start                    # Live chat UI at http://localhost:3000
+npm run experiments          # Run automated empirical benchmarks
 ```
 
 ---
@@ -101,6 +118,19 @@ Explore [`./LLM_Basics`](./LLM_Basics) for the complete breakdown. Key empirical
 3. **Context Blindness in N-grams:** A bigram predictor ($N=2$) only looks at $w_{t-1}$, causing it to loop infinitely or lose topical coherence—demonstrating why Transformer **self-attention** ($Q, K, V$) is necessary to resolve polysemy and long-range intent.
 
 👉 **[Read the Full Part 1 Deep Dive →](./LLM_Basics/README.md)**
+
+---
+
+## 🍔 Highlights from Part 2: First GenAI App
+
+Explore [`./02-first-genai-app`](./02-first-genai-app) for the complete architecture, source code, and empirical benchmarks. Key engineering takeaways:
+
+1. **Memory is an Application Illusion:** Raw foundation model APIs are 100% stateless functions. A call to `/api/chat/stateless` completely forgot customer "Harshit" by Turn 2 (108 tokens), while stateful memory (`/api/chat`) successfully recalled the name (152 tokens) solely because past turns were engineered back into the request payload.
+2. **Context Window Cost Curves:** In a 20-turn chat, full history (`full`) experienced linear token explosion (112 $\to$ 1,001 input tokens). Slicing strategies (`first_n` / `first_n_last_n`) kept tokens flat (~170–208 tokens) but dropped middle details. Meanwhile, **Running Summaries (`summary`)** compressed input tokens by **68.4%** (316 tokens vs. 1,001) while accurately preserving business-critical entities (Customer Name & Order `#48291`).
+3. **Structured System Prompts as Guardrails:** Applying a 4-part prompt (`ROLE`, `TASK`, `BEHAVIOR`, `CONSTRAINTS`) slashed output tokens by **95.1%** on out-of-scope queries (e.g. "What is Docker?" generated 809 tokens on raw model vs. a 39-token polite refusal on the guarded agent) while restricting customer support replies to a strict maximum of 2 sentences.
+4. **Factuality Calibration:** Under playful or nonexistent prompts (e.g. the satirical "Apple iBurger Pro 2025 with Neural Bun"), a raw model confabulated 148 tokens of fake hardware specs. Enforcing explicit epistemic grounding directives caused the model to produce a strict factual refusal in 44 tokens.
+
+👉 **[Read the Full Part 2 Deep Dive & Run the App →](./02-first-genai-app/README.md)**
 
 ---
 

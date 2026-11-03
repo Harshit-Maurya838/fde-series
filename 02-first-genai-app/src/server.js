@@ -30,6 +30,17 @@ app.use(express.text({ type: ["text/plain", "text/*"] }));
 app.use(express.static(path.join(__dirname, "../public")));
 
 /**
+ * Health check endpoint for UI connectivity status.
+ */
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "ok",
+    model: process.env.GEMINI_MODEL || "gemini-3.5-flash-lite",
+    time: new Date().toISOString(),
+  });
+});
+
+/**
  * 1. POST /api/summarize
  * Summarizes a customer support ticket in 2 lines.
  * Stateless, single LLM call. Body is text/plain.
