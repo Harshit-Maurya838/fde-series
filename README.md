@@ -34,7 +34,7 @@ flowchart LR
 | Part | Module | Status | Directory | Focus Areas |
 | :---: | :--- | :---: | :--- | :--- |
 | **01** | **[LLM Basics](./LLM_Basics)** | ✅ Completed | [`./LLM_Basics`](./LLM_Basics) | Tokenization (`tiktoken`), temperature sampling (Gemini API), bigram context failure, and logits $\to$ softmax mechanics. |
-| **02** | **First GenAI App** | 🔄 Upcoming | `./02-first-genai-app` | Connecting client SDKs, prompt engineering patterns, streaming responses, and practical error handling. |
+| **02** | **[First GenAI App](./02-first-genai-app)** | ✅ Completed | [`./02-first-genai-app`](./02-first-genai-app) | Express app, `@google/genai` SDK, stateless vs stateful memory, 4 history strategies & token economics, system prompt guardrails, and hallucination calibration. |
 | **03** | **Embeddings & Vector DBs** | ⏳ Planned | `./03-embeddings-vector-dbs` | High-dimensional representations, cosine distance vs. dot product, vector indexing (HNSW), and embedding retrieval. |
 | **04** | **RAG Systems** | ⏳ Planned | `./04-rag` | Retrieval-Augmented Generation: document ingestion, intelligent chunking, hybrid keyword/dense search, and reranking. |
 | **05** | **Structured Outputs & MCP** | ⏳ Planned | `./05-structured-outputs-mcp` | Deterministic JSON generation, Pydantic schemas, function calling, and the Model Context Protocol (MCP). |
