@@ -4,32 +4,44 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QuickBite Support AI | FDE Series Part 2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f172a;
-      --card-bg: #1e293b;
-      --accent: #38bdf8;
-      --accent-hover: #0ea5e9;
-      --user-bubble: #2563eb;
-      --model-bubble: #334155;
-      --text: #f8fafc;
+      --bg: #070a12;
+      --bg-gradient: radial-gradient(circle at 50% 0%, #111e38 0%, #070a12 75%);
+      --card-bg: #0c1322;
+      --card-border: rgba(59, 130, 246, 0.22);
+      --card-border-hover: rgba(59, 130, 246, 0.45);
+      --fde-blue: #2563eb;
+      --fde-blue-dark: #1d4ed8;
+      --fde-blue-glow: rgba(37, 99, 235, 0.35);
+      --fde-yellow: #facc15;
+      --fde-yellow-hover: #eab308;
+      --fde-cyan: #38bdf8;
+      --user-bubble: linear-gradient(135deg, #2563eb, #1d4ed8);
+      --model-bubble: #10192e;
+      --text: #ffffff;
       --text-muted: #94a3b8;
-      --border: #334155;
+      --text-subtle: #64748b;
+      --border: #1e293b;
       --success: #10b981;
-      --warning: #f59e0b;
       --danger: #ef4444;
       --radius: 12px;
+      --radius-sm: 8px;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     body {
       background: var(--bg);
+      background-image: var(--bg-gradient);
       color: var(--text);
       display: flex;
       flex-direction: column;
@@ -37,48 +49,131 @@
       overflow: hidden;
     }
 
+    /* Top App Header */
     header {
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 24px;
+      background: rgba(12, 19, 34, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 10px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-shrink: 0;
+      z-index: 10;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand-logo {
-      background: linear-gradient(135deg, #f97316, #ef4444);
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-    .brand-title {
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .brand-sub {
-      font-size: 12px;
-      color: var(--accent);
-    }
-
-    .top-controls {
+    .brand-section {
       display: flex;
       align-items: center;
       gap: 14px;
+    }
+
+    /* 3D FDE Badge inspired by thumbnail.png */
+    .fde-logo-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #090e1a;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      padding: 4px 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .fde-logo-text {
+      font-size: 20px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+      text-shadow: 2px 2px 0px #1d4ed8, 3px 3px 0px #1e40af;
+      line-height: 1;
+    }
+
+    .spark-icon {
+      color: var(--fde-cyan);
+      font-size: 11px;
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      animation: pulseSpark 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseSpark {
+      0%, 100% { opacity: 0.6; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.15); }
+    }
+
+    .brand-text-block {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .brand-top-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-app-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.2px;
+    }
+
+    .pill-yellow {
+      background: var(--fde-yellow);
+      color: #070a12;
+      font-weight: 800;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 6px rgba(250, 204, 21, 0.3);
+    }
+
+    .pill-blue {
+      background: var(--fde-blue);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      letter-spacing: 0.3px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .backend-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .backend-badge.online {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .backend-badge.offline {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+
+    /* Controls */
+    .top-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       font-size: 13px;
     }
 
@@ -88,87 +183,134 @@
       gap: 6px;
     }
 
-    select, input[type="number"], button {
-      background: #0f172a;
+    .control-label {
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    select, input[type="number"], .btn-ghost {
+      background: #0a101d;
       color: var(--text);
-      border: 1px solid var(--border);
-      padding: 6px 10px;
-      border-radius: 6px;
+      border: 1px solid var(--card-border);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
       font-size: 13px;
       outline: none;
+      transition: all 0.2s ease;
     }
 
     select:focus, input[type="number"]:focus {
-      border-color: var(--accent);
+      border-color: var(--fde-cyan);
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
     }
 
     button {
       cursor: pointer;
-      transition: background 0.15s ease, border-color 0.15s ease;
+      font-weight: 600;
+      transition: all 0.2s ease;
     }
 
-    button:hover {
-      background: #1e293b;
-      border-color: var(--accent);
+    .btn-ghost:hover {
+      background: #111b30;
+      border-color: var(--fde-cyan);
+      color: #ffffff;
+    }
+
+    .btn-summarize {
+      background: var(--fde-yellow);
+      color: #070a12;
+      border: none;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 2px 8px rgba(250, 204, 21, 0.25);
+    }
+
+    .btn-summarize:hover {
+      background: var(--fde-yellow-hover);
+      transform: translateY(-1px);
     }
 
     .btn-primary {
-      background: var(--accent);
-      color: #0f172a;
-      font-weight: 600;
+      background: var(--fde-blue);
+      color: #ffffff;
+      font-weight: 700;
       border: none;
+      padding: 8px 18px;
+      border-radius: var(--radius-sm);
+      box-shadow: 0 4px 12px var(--fde-blue-glow);
     }
 
     .btn-primary:hover {
-      background: var(--accent-hover);
+      background: var(--fde-blue-dark);
+      transform: translateY(-1px);
     }
 
-    /* Live Token Telemetry Bar */
+    /* Telemetry HUD Bar */
     .telemetry-bar {
-      background: #141f36;
-      border-bottom: 1px solid var(--border);
-      padding: 8px 24px;
+      background: rgba(10, 15, 26, 0.95);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+      padding: 7px 24px;
       display: flex;
-      gap: 24px;
+      gap: 20px;
       font-size: 12px;
       flex-shrink: 0;
       overflow-x: auto;
+      align-items: center;
     }
 
     .metric {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
     }
 
     .metric-label {
-      color: var(--text-muted);
+      color: var(--text-subtle);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.5px;
     }
 
     .metric-value {
+      font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
       color: var(--text);
-      background: #1e293b;
+      background: #0d1527;
       padding: 2px 8px;
-      border-radius: 4px;
-      border: 1px solid #334155;
+      border-radius: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 12px;
     }
 
-    .metric-value.highlight {
-      color: var(--accent);
-      border-color: rgba(56, 189, 248, 0.4);
+    .metric-value.yellow {
+      color: var(--fde-yellow);
+      border-color: rgba(250, 204, 21, 0.35);
+      background: rgba(250, 204, 21, 0.08);
     }
 
-    /* Main Chat Layout */
+    .metric-value.cyan {
+      color: var(--fde-cyan);
+      border-color: rgba(56, 189, 248, 0.35);
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    /* Main Container */
     .chat-container {
       flex: 1;
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      max-width: 1000px;
+      max-width: 1040px;
       width: 100%;
       margin: 0 auto;
-      padding: 16px 20px;
+      padding: 14px 20px 8px 20px;
     }
 
     .messages-pane {
@@ -177,18 +319,27 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
-      padding-right: 8px;
+      padding: 12px 14px 12px 4px;
+    }
+
+    .messages-pane::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .messages-pane::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.25);
+      border-radius: 10px;
     }
 
     .message-wrapper {
       display: flex;
       flex-direction: column;
-      max-width: 80%;
-      animation: fadeIn 0.2s ease;
+      max-width: 82%;
+      animation: fadeIn 0.25s ease-out;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -204,45 +355,81 @@
 
     .message-sender {
       font-size: 11px;
+      font-weight: 700;
       color: var(--text-muted);
-      margin-bottom: 4px;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       padding: 0 4px;
     }
 
+    .message-sender .avatar-mini {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+
+    .user .avatar-mini {
+      background: var(--fde-blue);
+      color: #fff;
+    }
+
+    .model .avatar-mini {
+      background: var(--fde-yellow);
+      color: #070a12;
+      font-weight: 800;
+    }
+
     .message-bubble {
-      padding: 12px 16px;
+      padding: 13px 18px;
       border-radius: var(--radius);
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 1.55;
       word-break: break-word;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     }
 
     .user .message-bubble {
       background: var(--user-bubble);
-      color: #fff;
-      border-bottom-right-radius: 2px;
+      color: #ffffff;
+      border-bottom-right-radius: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     .model .message-bubble {
       background: var(--model-bubble);
-      color: var(--text);
-      border-bottom-left-radius: 2px;
-      border: 1px solid var(--border);
+      color: #e2e8f0;
+      border-bottom-left-radius: 3px;
+      border: 1px solid var(--card-border);
     }
 
     .message-meta {
       font-size: 10px;
-      color: var(--text-muted);
-      margin-top: 4px;
+      color: var(--text-subtle);
+      margin-top: 5px;
       display: flex;
       gap: 8px;
       padding: 0 4px;
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    .badge {
-      padding: 1px 6px;
+    .badge-tag {
+      padding: 2px 7px;
       border-radius: 4px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+    }
+
+    .badge-tag.highlight {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--fde-cyan);
+      border-color: rgba(56, 189, 248, 0.25);
     }
 
     /* Quick suggestions */
@@ -250,49 +437,61 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin: 12px 0 8px 0;
+      margin: 10px 0 6px 0;
     }
 
     .prompt-chip {
-      background: #1e293b;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 4px 12px;
+      background: #0a1120;
+      border: 1px solid var(--card-border);
+      border-radius: 9999px;
+      padding: 5px 13px;
       font-size: 12px;
+      font-weight: 500;
       color: var(--text-muted);
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .prompt-chip:hover {
-      background: #334155;
-      color: var(--text);
-      border-color: var(--accent);
+      background: #121c32;
+      color: #ffffff;
+      border-color: var(--fde-cyan);
+      transform: translateY(-1px);
     }
 
-    /* Input area */
+    /* Input bar */
     .input-bar {
       display: flex;
-      gap: 8px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
+      gap: 10px;
+      background: #0b1222;
+      border: 1px solid var(--card-border);
       border-radius: var(--radius);
-      padding: 8px 12px;
+      padding: 8px 14px;
       margin-top: 4px;
       align-items: center;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      transition: border-color 0.2s ease;
+    }
+
+    .input-bar:focus-within {
+      border-color: var(--fde-cyan);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
     }
 
     .input-bar input {
       flex: 1;
       background: transparent;
       border: none;
-      color: var(--text);
+      color: #ffffff;
       font-size: 14px;
       outline: none;
     }
 
     .input-bar input::placeholder {
-      color: var(--text-muted);
+      color: var(--text-subtle);
     }
 
     .mode-toggle {
@@ -300,14 +499,18 @@
       align-items: center;
       gap: 6px;
       font-size: 12px;
+      font-weight: 600;
       color: var(--text-muted);
       border-left: 1px solid var(--border);
-      padding-left: 10px;
+      padding-left: 12px;
+      cursor: pointer;
     }
 
     .mode-toggle input {
-      accent-color: var(--warning);
+      accent-color: var(--fde-yellow);
       cursor: pointer;
+      width: 15px;
+      height: 15px;
     }
 
     .typing-indicator {
@@ -319,30 +522,110 @@
       font-size: 12px;
       color: var(--text-muted);
       font-style: italic;
-      border: 1px solid var(--border);
+      border: 1px solid var(--card-border);
     }
+
+    /* Footer styled after thumbnail.png */
+    footer {
+      background: rgba(9, 14, 25, 0.95);
+      border-top: 1px solid var(--card-border);
+      padding: 8px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+    }
+
+    .footer-left strong {
+      color: #ffffff;
+    }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .social-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      color: #ffffff;
+      background: #0d1527;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .social-pill:hover {
+      background: #17233f;
+      border-color: var(--fde-cyan);
+      transform: translateY(-1px);
+    }
+
+    .social-pill.linkedin {
+      border-color: rgba(10, 102, 194, 0.4);
+    }
+
+    .social-pill.linkedin:hover {
+      background: #0a66c2;
+    }
+
+    .follow-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(37, 99, 235, 0.15);
+      border: 1px solid rgba(37, 99, 235, 0.5);
+      color: var(--fde-cyan);
+      font-weight: 700;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+    }
+
     /* Modal Drawer for Summarizer */
     .modal-overlay {
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
       z-index: 100;
       justify-content: center;
       align-items: center;
     }
 
     .modal-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
+      background: #0d1527;
+      border: 1px solid var(--card-border-hover);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(37, 99, 235, 0.2);
       border-radius: var(--radius);
       width: 90%;
-      max-width: 600px;
+      max-width: 620px;
       padding: 24px;
       display: flex;
       flex-direction: column;
       gap: 16px;
+      animation: modalPop 0.2s ease-out;
+    }
+
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .modal-header {
@@ -352,44 +635,54 @@
     }
 
     .modal-title {
-      font-size: 16px;
-      font-weight: 700;
+      font-size: 17px;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .modal-close {
       background: transparent;
       border: none;
-      font-size: 20px;
+      font-size: 22px;
       color: var(--text-muted);
       cursor: pointer;
+    }
+
+    .modal-close:hover {
+      color: #ffffff;
     }
 
     .modal-card textarea {
       width: 100%;
       height: 140px;
-      background: #0f172a;
-      border: 1px solid var(--border);
+      background: #080d19;
+      border: 1px solid var(--card-border);
       color: var(--text);
       border-radius: 8px;
-      padding: 10px;
+      padding: 12px;
       font-size: 13px;
+      line-height: 1.5;
       resize: vertical;
       outline: none;
     }
 
     .modal-card textarea:focus {
-      border-color: var(--accent);
+      border-color: var(--fde-cyan);
     }
 
     .summary-result-box {
-      background: #0f172a;
-      border: 1px solid var(--border);
+      background: #080d19;
+      border: 1px solid var(--card-border);
       border-radius: 8px;
-      padding: 12px;
+      padding: 14px;
       font-size: 13px;
-      line-height: 1.5;
-      min-height: 60px;
+      line-height: 1.55;
+      min-height: 65px;
       white-space: pre-wrap;
+      color: #e2e8f0;
     }
   </style>
 </head>
@@ -397,21 +690,27 @@
 
   <!-- Top App Header -->
   <header>
-    <div class="brand">
-      <div class="brand-logo">🍔</div>
-      <div>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span class="brand-title">QuickBite Support AI</span>
-          <span id="backendStatus" style="font-size: 11px; padding: 2px 6px; border-radius: 4px; background: #334155; color: #94a3b8;">Checking...</span>
+    <div class="brand-section">
+      <!-- 3D FDE Badge inspired by thumbnail.png -->
+      <div class="fde-logo-container" title="Forward Deployed Engineer Series">
+        <span class="fde-logo-text">FDE</span>
+        <span class="spark-icon">✦</span>
+      </div>
+
+      <div class="brand-text-block">
+        <div class="brand-top-row">
+          <span class="brand-app-name">QuickBite Support AI</span>
+          <span class="pill-yellow">Forward Deployed Engineer</span>
+          <span class="pill-blue">LEARNING SERIES • PART 2</span>
+          <span id="backendStatus" class="backend-badge offline">● Checking...</span>
         </div>
-        <div class="brand-sub">Part 2: First GenAI App | History & Token Cost</div>
       </div>
     </div>
 
     <div class="top-controls">
       <div class="control-group">
-        <label for="strategySelect">Strategy:</label>
-        <select id="strategySelect" title="History strategy">
+        <span class="control-label">Strategy:</span>
+        <select id="strategySelect" title="History context strategy">
           <option value="full" selected>Full History</option>
           <option value="first_n">First N</option>
           <option value="first_n_last_n">First N + Last N</option>
@@ -420,21 +719,21 @@
       </div>
 
       <div class="control-group">
-        <label for="nParam">N:</label>
+        <span class="control-label">N:</span>
         <input type="number" id="nParam" value="2" min="1" max="10" style="width: 50px;">
       </div>
 
       <div class="control-group">
-        <button id="btnOpenSummarizer" title="Open Ticket Summarizer">📝 Ticket Summarizer</button>
+        <button class="btn-summarize" id="btnOpenSummarizer" title="Open Ticket Summarizer">📝 Ticket Summarizer</button>
       </div>
 
       <div class="control-group">
-        <button id="btnNewSession" title="Start a fresh chat session">🔄 Reset Session</button>
+        <button class="btn-ghost" id="btnNewSession" title="Start a fresh chat session">🔄 Reset</button>
       </div>
     </div>
   </header>
 
-  <!-- Live Token Telemetry Bar -->
+  <!-- Live Token Telemetry HUD Bar -->
   <div class="telemetry-bar">
     <div class="metric">
       <span class="metric-label">Session ID:</span>
@@ -442,18 +741,18 @@
     </div>
     <div class="metric">
       <span class="metric-label">Last Input Tokens:</span>
-      <span class="metric-value highlight" id="dispLastInput">0</span>
+      <span class="metric-value yellow" id="dispLastInput">0</span>
     </div>
     <div class="metric">
       <span class="metric-label">Last Output Tokens:</span>
       <span class="metric-value" id="dispLastOutput">0</span>
     </div>
     <div class="metric">
-      <span class="metric-label">Session Total Tokens:</span>
-      <span class="metric-value highlight" id="dispCumulative">0</span>
+      <span class="metric-label">Cumulative Session:</span>
+      <span class="metric-value cyan" id="dispCumulative">0</span>
     </div>
     <div class="metric">
-      <span class="metric-label">History Turns:</span>
+      <span class="metric-label">Turns:</span>
       <span class="metric-value" id="dispTurns">0</span>
     </div>
     <div class="metric">
@@ -466,66 +765,102 @@
   <div class="chat-container">
     <div class="messages-pane" id="messagesPane">
       <div class="message-wrapper model">
-        <div class="message-sender">QuickBite Assistant</div>
+        <div class="message-sender">
+          <span class="avatar-mini">🍔</span>
+          QuickBite Support Executive
+        </div>
         <div class="message-bubble">
-          Hello! Welcome to QuickBite customer support. How can I assist you with your food order or delivery today?
+          Hello! Welcome to QuickBite customer support. How can I assist you with your food order or delivery status today?
         </div>
         <div class="message-meta">
-          <span class="badge">System Initialized</span>
+          <span class="badge-tag highlight">System Initialized</span>
+          <span class="badge-tag">QuickBite 4-Part System Prompt</span>
         </div>
       </div>
     </div>
 
     <div class="typing-indicator" id="typingIndicator">
-      Agent is thinking...
+      QuickBite Agent is thinking...
     </div>
 
     <!-- Suggested Quick Prompts -->
     <div class="quick-prompts">
       <button class="prompt-chip" data-prompt="Hi, my name is Harshit and my order ID is #48291.">
-        👤 "My name is Harshit & order is #48291"
+        👤 <span>"My name is Harshit & order is #48291"</span>
       </button>
       <button class="prompt-chip" data-prompt="What is my name and order ID?">
-        🧠 "What is my name and order ID?"
+        🧠 <span>"What is my name and order ID?"</span>
       </button>
       <button class="prompt-chip" data-prompt="My burger arrived cold and soggy. Can I get a replacement?">
-        🍔 "Burger arrived cold and soggy"
+        🍔 <span>"Burger arrived cold and soggy"</span>
       </button>
       <button class="prompt-chip" data-prompt="Can you explain what Docker containers are?">
-        🚫 Out-of-Scope: "What is Docker?"
+        🚫 <span>Out-of-Scope: "What is Docker?"</span>
       </button>
     </div>
 
     <!-- Message Input Bar -->
     <div class="input-bar">
-      <input type="text" id="userInput" placeholder="Type a message to QuickBite support..." autocomplete="off">
-      <div class="mode-toggle" title="Stateless calls send only the current message with no history">
+      <input type="text" id="userInput" placeholder="Ask QuickBite support about your order, delivery, or refund..." autocomplete="off">
+      <label class="mode-toggle" title="Stateless calls send only the current message with zero history">
         <input type="checkbox" id="statelessToggle">
-        <label for="statelessToggle">Stateless</label>
-      </div>
+        <span>Stateless</span>
+      </label>
       <button class="btn-primary" id="btnSend">Send</button>
     </div>
   </div>
+
+  <!-- Footer styled after thumbnail.png with creator and links -->
+  <footer>
+    <div class="footer-left">
+      <span>Created by <strong>Harshit-Maurya838</strong></span>
+      <span>•</span>
+      <span>Part of the <strong>Forward Deployed Engineer (FDE) Series</strong></span>
+    </div>
+
+    <div class="footer-right">
+      <a class="social-pill" href="https://github.com/Harshit-Maurya838" target="_blank" rel="noopener noreferrer">
+        <svg height="14" width="14" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        <span>/Harshit-Maurya838</span>
+      </a>
+
+      <a class="social-pill linkedin" href="https://www.linkedin.com/in/44-harshit-maurya" target="_blank" rel="noopener noreferrer">
+        <svg height="14" width="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9h2.79v8.37H6.46v-8.37M7.86 6.55a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24z"/>
+        </svg>
+        <span>/44-harshit-maurya</span>
+      </a>
+
+      <span class="follow-banner">
+        <span>⚡ Follow for learning & discovering new</span>
+      </span>
+    </div>
+  </footer>
 
   <!-- Ticket Summarizer Modal -->
   <div class="modal-overlay" id="summarizerModal">
     <div class="modal-card">
       <div class="modal-header">
-        <div class="modal-title">📝 Ticket Summarizer (POST /api/summarize)</div>
+        <div class="modal-title">
+          <span>📝 Ticket Summarizer</span>
+          <span class="pill-blue">POST /api/summarize</span>
+        </div>
         <button class="modal-close" id="btnCloseSummarizer">&times;</button>
       </div>
-      <p style="font-size: 13px; color: var(--text-muted);">
+      <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
         Paste a raw customer ticket below. The server calls Gemini to produce a 2-line concise summary via a single stateless call.
       </p>
       <textarea id="ticketInput" placeholder="Paste ticket here...">Customer Support Ticket #98124
 Customer: Emily Watson
 Issue: I placed an order for two vegan pizzas and garlic bread from Downtown Pizzeria at 7:30 PM. The estimated delivery time was 8:05 PM. The food arrived at 9:15 PM (over an hour late) and the driver handed me a crushed box with cold vegetarian pasta instead of my pizza. I tried calling the restaurant, but they did not answer. I demand a full refund and credit to my account.</textarea>
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <button class="btn-primary" id="btnRunSummarize">Summarize in 2 Lines</button>
-        <span id="summarizeTokens" style="font-size: 12px; color: var(--accent);"></span>
+        <button class="btn-summarize" id="btnRunSummarize">Summarize in 2 Lines</button>
+        <span id="summarizeTokens" style="font-size: 12px; color: var(--fde-cyan); font-family: 'JetBrains Mono', monospace;"></span>
       </div>
       <div>
-        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Output:</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600;">Generated 2-Line Summary:</div>
         <div class="summary-result-box" id="summarizeOutput">Click "Summarize in 2 Lines" to run.</div>
       </div>
     </div>
@@ -572,18 +907,14 @@ Issue: I placed an order for two vegan pizzas and garlic bread from Downtown Piz
         if (res.ok) {
           const data = await res.json();
           backendStatus.textContent = `● Server Online (${data.model || "Gemini"})`;
-          backendStatus.style.background = "rgba(16, 185, 129, 0.2)";
-          backendStatus.style.color = "#10b981";
-          backendStatus.style.border = "1px solid rgba(16, 185, 129, 0.4)";
+          backendStatus.className = "backend-badge online";
           return true;
         }
       } catch (e) {
         // Backend not reachable
       }
       backendStatus.textContent = "● Server Offline (Run: npm start)";
-      backendStatus.style.background = "rgba(239, 68, 68, 0.2)";
-      backendStatus.style.color = "#ef4444";
-      backendStatus.style.border = "1px solid rgba(239, 68, 68, 0.4)";
+      backendStatus.className = "backend-badge offline";
       return false;
     }
 
@@ -637,12 +968,16 @@ Issue: I placed an order for two vegan pizzas and garlic bread from Downtown Piz
       turnCount = 0;
       messagesPane.innerHTML = `
         <div class="message-wrapper model">
-          <div class="message-sender">QuickBite Assistant</div>
+          <div class="message-sender">
+            <span class="avatar-mini">🍔</span>
+            QuickBite Support Executive
+          </div>
           <div class="message-bubble">
-            Hello! Welcome to QuickBite customer support. How can I assist you with your food order or delivery today?
+            Hello! Welcome to QuickBite customer support. How can I assist you with your food order or delivery status today?
           </div>
           <div class="message-meta">
-            <span class="badge">Session Initialized</span>
+            <span class="badge-tag highlight">Session Initialized</span>
+            <span class="badge-tag">QuickBite 4-Part System Prompt</span>
           </div>
         </div>
       `;
@@ -655,7 +990,9 @@ Issue: I placed an order for two vegan pizzas and garlic bread from Downtown Piz
 
       const sender = document.createElement("div");
       sender.className = "message-sender";
-      sender.textContent = role === "user" ? "You" : "QuickBite Assistant";
+      sender.innerHTML = role === "user"
+        ? `<span class="avatar-mini">👤</span> You`
+        : `<span class="avatar-mini">🍔</span> QuickBite Support Executive`;
 
       const bubble = document.createElement("div");
       bubble.className = "message-bubble";
@@ -667,7 +1004,7 @@ Issue: I placed an order for two vegan pizzas and garlic bread from Downtown Piz
       if (metaInfo) {
         const meta = document.createElement("div");
         meta.className = "message-meta";
-        meta.innerHTML = `<span class="badge">${metaInfo}</span>`;
+        meta.innerHTML = `<span class="badge-tag highlight">${metaInfo}</span>`;
         wrapper.appendChild(meta);
       }
 
@@ -807,4 +1144,3 @@ Issue: I placed an order for two vegan pizzas and garlic bread from Downtown Piz
   </script>
 </body>
 </html>
-
